@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mindcraft - Tiny games. Real skills.</title>
+
+    <!-- PWA / Mobile Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="mindcraft_app_icon.png">
+    <link rel="apple-touch-icon" href="mindcraft_app_icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0F172A">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Color Palette - Premium & Playful */
+            --bg-color: #0F172A;
+            --text-color: #F8FAFC;
+            --primary-color: #8B5CF6;
+            /* Violet */
+            --primary-hover: #7C3AED;
+            --secondary-color: #ec4899;
+            /* Pink */
+            --accent-color: #10B981;
+            /* Emerald */
+            --card-bg: #1E293B;
+            --error-color: #EF4444;
+
+            --font-main: 'Outfit', sans-serif;
+
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            overflow: hidden;
+            /* Prevent scrolling for app-feel */
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #app {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            max-width: 600px;
+            /* Mobile constraint on desktop */
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(to bottom, #0F172A, #1e1b4b);
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        .view {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: var(--spacing-md);
+            animation: fadeIn 0.3s ease-out;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        #main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .logo {
+            font-weight: 900;
+            font-size: 1.25rem;
+            background: linear-gradient(to right, #c084fc, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Buttons */
+        button {
+            font-family: inherit;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-full);
+            font-size: 1.1rem;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-full);
+            font-size: 1.1rem;
+            width: 100%;
+            margin-top: var(--spacing-sm);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Login View */
+        #view-login {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-xs);
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            color: #94a3b8;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* Game View Styles */
+        #view-game {
+            position: relative;
+            padding-top: var(--spacing-lg);
+        }
+
+        .game-hud {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .game-instruction {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-lg);
+            font-weight: 500;
+        }
+
+        #target-item {
+            color: var(--accent-color);
+            font-weight: 900;
+        }
+
+        .game-area {
+            flex: 1;
+            /* Needs a fixed height or flex grow to allow random positioning */
+            min-height: 400px;
+            position: relative;
+        }
+
+        .target {
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            /* Absolute positioning for random jumps */
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            /* IMPORTANT: We will override left/top in JS */
+        }
+
+        .target:active {
+            transform: scale(0.9);
+        }
+
+        /* Feedback Animation Class */
+        .shake {
+            animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Navigation/Header (Conditional) -->
+        <header id="main-header" class="hidden">
+            <div class="logo">Mindcraft</div>
+            <div class="user-info">
+                <span id="user-streak">🔥 0</span>
+                <button id="logout-btn" class="icon-btn">Logout</button>
+            </div>
+        </header>
+
+        <!-- Views Container -->
+        <main id="main-container">
+            <!-- Loading View -->
+            <div id="view-loading" class="view active">
+                <div class="spinner"></div>
+                <h1>Mindcraft</h1>
+            </div>
+
+            <!-- Login View -->
+            <div id="view-login" class="view hidden">
+                <div class="hero">
+                    <h1>Mindcraft</h1>
+                    <p>Tiny games. Real skills.</p>
+                </div>
+                <div class="login-form">
+                    <button id="login-google-btn" class="primary-btn">
+                        Continue with Google
+                    </button>
+                    <!-- Fallback for development/demo if needed -->
+                    <button id="login-guest-btn" class="secondary-btn">
+                        Play as Guest
+                    </button>
+                </div>
+            </div>
+
+            <!-- Home/Dashboard View -->
+            <div id="view-home" class="view hidden">
+                <h2>Ready to focus?</h2>
+                <div class="card game-card">
+                    <div class="card-content">
+                        <h3>Coffee vs Bell</h3>
+                        <p>Sharpen your impulse control.</p>
+                        <div class="tags">
+                            <span class="tag">Focus</span>
+                            <span class="tag">60s</span>
+                        </div>
+                    </div>
+                    <button id="start-game-btn" class="play-btn">PLAY</button>
+                </div>
+
+                <div class="card stats-card">
+                    <h3>Your Progress</h3>
+                    <div id="stats-summary">
+                        <!-- Populated by JS -->
+                        <p>Plays today: <span id="plays-today">0</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game View -->
+            <div id="view-game" class="view hidden">
+                <div class="game-hud">
+                    <div class="timer" id="game-timer">60</div>
+                    <div class="score" id="game-score">0</div>
+                </div>
+
+                <div class="game-instruction" id="game-instruction">
+                    Tap <span id="target-item">COFFEE</span>!
+                </div>
+
+                <div class="game-area" id="game-area">
+                    <!-- Game targets scale/appear here -->
+                    <div id="game-target" class="target"></div>
+                </div>
+            </div>
+
+            <!-- Results View -->
+            <div id="view-results" class="view hidden">
+                <h2>Session Complete!</h2>
+                <div class="result-score">
+                    <span id="result-score-val">0</span>
+                    <small>pts</small>
+                </div>
+                <div class="feedback-card">
+                    <h3>Feedback</h3>
+                    <p id="result-feedback">Great focus!</p>
+                </div>
+                <button id="home-btn" class="primary-btn">Back to Home</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- App Logic -->
+    <script>
+        /**
+         * Mindcraft MVP - Standalone Logic
+         */
+
+        // --- Game Constants & Assets (Emojis for MVP) ---
+        const ASSETS = {
+            COFFEE: '☕',
+            BELL: '🔔',
+        };
+
+        class GameEngine {
+            constructor(onGameOver, onUpdate) {
+                this.onGameOver = onGameOver;
+                this.onUpdate = onUpdate;
+
+                this.score = 0;
+                this.duration = 60; // seconds
+                this.timeLeft = 60;
+                this.isPlaying = false;
+
+                this.currentRule = 'COFFEE'; // Target to hit
+
+                this.timerInterval = null;
+                this.gameLoopId = null;
+                this.ruleSwitchTimeout = null;
+            }
+
+            start() {
+                this.score = 0;
+                this.timeLeft = 60;
+                this.isPlaying = true;
+                this.currentRule = 'COFFEE'; // Always start with Coffee
+
+                this.updateUI();
+                this.spawnTarget();
+
+                // Start Timer
+                this.timerInterval = setInterval(() => {
+                    this.timeLeft--;
+                    this.updateUI();
+                    if (this.timeLeft <= 0) this.endGame();
+                }, 1000);
+
+                // Schedule Rule Switch
+                this.scheduleRuleSwitch();
+            }
+
+            scheduleRuleSwitch() {
+                if (!this.isPlaying) return;
+                // Faster pacing: Switch every 5-10 seconds
+                const time = Math.random() * 5000 + 5000;
+                this.ruleSwitchTimeout = setTimeout(() => {
+                    this.switchRule();
+                    this.scheduleRuleSwitch();
+                }, time);
+            }
+
+            switchRule() {
+                if (!this.isPlaying) return;
+                this.currentRule = this.currentRule === 'COFFEE' ? 'BELL' : 'COFFEE';
+
+                // Visual Flair for Rule Switch
+                const instruction = document.getElementById('game-instruction');
+                instruction.classList.add('shake');
+                setTimeout(() => instruction.classList.remove('shake'), 400);
+
+                this.updateUI();
+            }
+
+            handleInput(type, x, y) {
+                if (!this.isPlaying) return;
+
+                if (type === this.currentRule) {
+                    // Correct!
+                    this.score += 10;
+                    this.showFloatingText(x, y, '+10', 'ecc'); // ecc for accent color
+                    this.spawnTarget(); // Immediate new target
+                } else {
+                    // Wrong!
+                    this.score = Math.max(0, this.score - 5);
+                    this.showFloatingText(x, y, '-5', 'err'); // err for error color
+                    const gameArea = document.getElementById('game-area');
+                    gameArea.classList.add('shake');
+                    setTimeout(() => gameArea.classList.remove('shake'), 400);
+                }
+                this.updateUI();
+            }
+
+            spawnTarget() {
+                const targetEl = document.getElementById('game-target');
+                const gameArea = document.getElementById('game-area');
+
+                // Randomly decide what to show
+                let type = this.currentRule;
+                if (Math.random() > 0.6) {
+                    type = this.currentRule === 'COFFEE' ? 'BELL' : 'COFFEE';
+                }
+
+                // Update Visual
+                targetEl.textContent = ASSETS[type];
+                targetEl.dataset.type = type;
+
+                // Random Position logic
+                const areaRect = gameArea.getBoundingClientRect();
+                const size = 100; // rough size of target (100x100 from css)
+
+                const width = areaRect.width || 300;
+                const height = areaRect.height || 400;
+
+                const maxX = width - size;
+                const maxY = height - size;
+
+                const randomX = Math.max(0, Math.floor(Math.random() * maxX));
+                const randomY = Math.max(0, Math.floor(Math.random() * maxY));
+
+                targetEl.style.position = 'absolute';
+                targetEl.style.left = `${randomX}px`;
+                targetEl.style.top = `${randomY}px`;
+                targetEl.style.transform = 'none';
+
+                // Pop animation
+                // Quick scale 0 -> 1
+                targetEl.animate([
+                    { transform: 'scale(0)' },
+                    { transform: 'scale(1)' }
+                ], {
+                    duration: 200,
+                    easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                });
+            }
+
+            showFloatingText(x, y, text, type) {
+                const el = document.createElement('div');
+                el.innerText = text;
+                el.style.position = 'fixed'; // Fixed relative to viewport for feedback
+                el.style.left = `${x}px`;
+                el.style.top = `${y}px`;
+                el.style.fontSize = '2rem';
+                el.style.fontWeight = '900';
+                el.style.color = type === 'ecc' ? 'var(--accent-color)' : 'var(--error-color)';
+                el.style.pointerEvents = 'none';
+                el.style.zIndex = '100';
+                el.style.textShadow = '0 2px 4px rgba(0,0,0,0.5)';
+                el.style.animation = 'floatUp 0.8s ease-out forwards';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 800);
+            }
+
+            endGame() {
+                this.isPlaying = false;
+                clearInterval(this.timerInterval);
+                clearTimeout(this.ruleSwitchTimeout);
+                this.onGameOver(this.score);
+            }
+
+            updateUI() {
+                if (this.onUpdate) {
+                    this.onUpdate({
+                        score: this.score,
+                        time: this.timeLeft,
+                        rule: this.currentRule
+                    });
+                }
+            }
+        }
+
+        // --- App Logic ---
+        const App = {
+            game: null,
+            state: {
+                user: null,
+                currentView: 'view-loading',
+                streak: 0,
+                lastScore: 0
+            },
+
+            init() {
+                console.log('Mindcraft Initializing...');
+                // Inject Floating Animation Keyframes dynamically
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @keyframes floatUp {
+                        0% { transform: translateY(0); opacity: 1; }
+                        100% { transform: translateY(-50px); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+
+                this.cacheDOM();
+                this.bindEvents();
+
+                // Simulate Auth
+                setTimeout(() => {
+                    this.router('view-login');
+                }, 800);
+            },
+
+            cacheDOM() {
+                this.dom = {
+                    views: document.querySelectorAll('.view'),
+                    loginBtnGuest: document.getElementById('login-guest-btn'),
+                    startGameBtn: document.getElementById('start-game-btn'),
+                    homeBtn: document.getElementById('home-btn'),
+                    logoutBtn: document.getElementById('logout-btn'),
+                    mainHeader: document.getElementById('main-header'),
+                    // Game Elements
+                    gameTimer: document.getElementById('game-timer'),
+                    gameScore: document.getElementById('game-score'),
+                    targetItem: document.getElementById('target-item'),
+                    gameTarget: document.getElementById('game-target'),
+                    resultScore: document.getElementById('result-score-val'),
+                    userStreak: document.getElementById('user-streak'),
+                };
+            },
+
+            bindEvents() {
+                this.dom.loginBtnGuest.addEventListener('click', () => this.loginAsGuest());
+
+                this.dom.startGameBtn.addEventListener('click', () => {
+                    this.router('view-game');
+                    this.startGame();
+                });
+
+                const handleTap = (e) => {
+                    if (this.game && this.game.isPlaying) {
+                        e.preventDefault();
+                        const rect = e.target.getBoundingClientRect();
+                        const x = rect.left + rect.width / 2; // Center of element
+                        const y = rect.top; // Top of element
+                        this.game.handleInput(this.dom.gameTarget.dataset.type, x, y);
+                    }
+                };
+
+                // Game Interaction
+                // Use mousedown/touchstart on the TARGET itself
+                this.dom.gameTarget.addEventListener('mousedown', handleTap);
+                this.dom.gameTarget.addEventListener('touchstart', handleTap);
+
+                this.dom.homeBtn.addEventListener('click', () => this.router('view-home'));
+                this.dom.logoutBtn.addEventListener('click', () => this.logout());
+            },
+
+            startGame() {
+                this.game = new GameEngine(
+                    (finalScore) => this.handleGameOver(finalScore), // On End
+                    (state) => this.updateGameUI(state) // On Update
+                );
+                this.game.start();
+            },
+
+            updateGameUI(state) {
+                this.dom.gameTimer.textContent = state.time;
+                this.dom.gameScore.textContent = state.score;
+                this.dom.targetItem.textContent = state.rule; // Text description
+
+                // Color code the rule text
+                if (state.rule === 'COFFEE') {
+                    this.dom.targetItem.style.color = 'var(--accent-color)'; // Emerald
+                } else {
+                    this.dom.targetItem.style.color = 'var(--secondary-color)'; // Pink
+                }
+            },
+
+            handleGameOver(score) {
+                this.state.lastScore = score;
+                this.dom.resultScore.textContent = score;
+
+                // Update Streak Logic (Simple MVP)
+                if (score > 0) {
+                    this.state.streak++;
+                } else {
+                    this.state.streak = 0;
+                }
+                this.dom.userStreak.textContent = `🔥 ${this.state.streak}`;
+
+                this.router('view-results');
+            },
+
+            router(viewId) {
+                this.dom.views.forEach(el => el.classList.add('hidden'));
+                this.dom.views.forEach(el => el.classList.remove('active'));
+                const target = document.getElementById(viewId);
+                if (target) {
+                    target.classList.remove('hidden');
+                    target.classList.add('active');
+                    this.state.currentView = viewId;
+                }
+                if (viewId === 'view-login' || viewId === 'view-loading') {
+                    this.dom.mainHeader.classList.add('hidden');
+                } else {
+                    this.dom.mainHeader.classList.remove('hidden');
+                }
+            },
+
+            loginAsGuest() {
+                this.state.user = { uid: 'guest123', name: 'Guest' };
+                this.router('view-home');
+            },
+
+            logout() {
+                this.state.user = null;
+                this.router('view-login');
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            App.init();
+        });
+    </script>
+</body>
+
+</html>

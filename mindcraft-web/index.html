@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mindcraft - Tiny games. Real skills.</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <!-- Firebase SDKs (Compat for easier vanilla use, or Modular) - Using Modular via Import Maps or Module scripts is better modern practice, but CDN is simplest for no-build -->
+    <script type="module" src="js/app.js" defer></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Navigation/Header (Conditional) -->
+        <header id="main-header" class="hidden">
+            <div class="logo">Mindcraft</div>
+            <div class="user-info">
+                <span id="user-streak">🔥 0</span>
+                <button id="logout-btn" class="icon-btn">Logout</button>
+            </div>
+        </header>
+
+        <!-- Views Container -->
+        <main id="main-container">
+            <!-- Loading View -->
+            <div id="view-loading" class="view active">
+                <div class="spinner"></div>
+                <h1>Mindcraft</h1>
+            </div>
+
+            <!-- Login View -->
+            <div id="view-login" class="view hidden">
+                <div class="hero">
+                    <h1>Mindcraft</h1>
+                    <p>Tiny games. Real skills.</p>
+                </div>
+                <div class="login-form">
+                    <button id="login-google-btn" class="primary-btn">
+                        Continue with Google
+                    </button>
+                    <!-- Fallback for development/demo if needed -->
+                    <button id="login-guest-btn" class="secondary-btn">
+                        Play as Guest
+                    </button>
+                </div>
+            </div>
+
+            <!-- Home/Dashboard View -->
+            <div id="view-home" class="view hidden">
+                <h2>Ready to focus?</h2>
+                <div class="card game-card">
+                    <div class="card-content">
+                        <h3>Coffee vs Bell</h3>
+                        <p>Sharpen your impulse control.</p>
+                        <div class="tags">
+                            <span class="tag">Focus</span>
+                            <span class="tag">60s</span>
+                        </div>
+                    </div>
+                    <button id="start-game-btn" class="play-btn">PLAY</button>
+                </div>
+
+                <div class="card stats-card">
+                    <h3>Your Progress</h3>
+                    <div id="stats-summary">
+                        <!-- Populated by JS -->
+                        <p>Plays today: <span id="plays-today">0</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game View -->
+            <div id="view-game" class="view hidden">
+                <div class="game-hud">
+                    <div class="timer" id="game-timer">60</div>
+                    <div class="score" id="game-score">0</div>
+                </div>
+                
+                <div class="game-instruction" id="game-instruction">
+                    Tap <span id="target-item">COFFEE</span>!
+                </div>
+
+                <div class="game-area" id="game-area">
+                    <!-- Game targets scale/appear here -->
+                    <div id="game-target" class="target"></div>
+                </div>
+            </div>
+
+            <!-- Results View -->
+            <div id="view-results" class="view hidden">
+                <h2>Session Complete!</h2>
+                <div class="result-score">
+                    <span id="result-score-val">0</span>
+                    <small>pts</small>
+                </div>
+                <div class="feedback-card">
+                    <h3>Feedback</h3>
+                    <p id="result-feedback">Great focus!</p>
+                </div>
+                <button id="home-btn" class="primary-btn">Back to Home</button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

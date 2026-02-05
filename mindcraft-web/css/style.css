@@ -1,0 +1,196 @@
+:root {
+    /* Color Palette - Premium & Playful */
+    --bg-color: #0F172A;
+    --text-color: #F8FAFC;
+    --primary-color: #8B5CF6; /* Violet */
+    --primary-hover: #7C3AED;
+    --secondary-color: #ec4899; /* Pink */
+    --accent-color: #10B981; /* Emerald */
+    --card-bg: #1E293B;
+    --error-color: #EF4444;
+    
+    --font-main: 'Outfit', sans-serif;
+    
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-full: 9999px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    overflow: hidden; /* Prevent scrolling for app-feel */
+    height: 100vh;
+    width: 100vw;
+}
+
+#app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    max-width: 600px; /* Mobile constraint on desktop */
+    margin: 0 auto;
+    position: relative;
+    background: linear-gradient(to bottom, #0F172A, #1e1b4b);
+}
+
+/* Utilities */
+.hidden { display: none !important; }
+.view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-md);
+    animation: fadeIn 0.3s ease-out;
+    height: 100%;
+    overflow-y: auto;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header */
+#main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+.logo {
+    font-weight: 900;
+    font-size: 1.25rem;
+    background: linear-gradient(to right, #c084fc, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Buttons */
+button {
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform 0.1s, opacity 0.2s;
+}
+button:active { transform: scale(0.96); }
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: 1.1rem;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.1);
+    color: var(--text-color);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: 1.1rem;
+    width: 100%;
+    margin-top: var(--spacing-sm);
+}
+
+/* Cards */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Login View */
+#view-login {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-xs);
+    letter-spacing: -1px;
+}
+.hero p {
+    color: #94a3b8;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Game View Styles */
+#view-game {
+    position: relative;
+    padding-top: var(--spacing-lg);
+}
+.game-hud {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: var(--spacing-md);
+}
+.game-instruction {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 500;
+}
+#target-item {
+    color: var(--accent-color);
+    font-weight: 900;
+}
+.game-area {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.target {
+    width: 120px;
+    height: 120px;
+    background-color: white; /* Placeholder for image */
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: transform 0.1s;
+    /* In real imp, using background-image */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem; 
+}
+.target:active { transform: scale(0.9); }
+
+/* Feedback Animation Class */
+.shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
